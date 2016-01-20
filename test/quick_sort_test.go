@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"testing"
 	"time"
+	"sort"
 )
 
 const N = 100
@@ -43,6 +44,14 @@ func BenchmarkParallelQuickSort(b *testing.B) {
 	jobDone := make(chan bool)
 	go sorts.ParallelQuickSort(testData, 0, len(testData)-1, jobDone)
 	<-jobDone
+}
+
+func BenchmarkNativeSort(b *testing.B) {
+	b.StopTimer()
+	testData := generateInput(b.N)
+	b.StartTimer()
+
+	sort.Ints(testData)
 }
 
 func generateInput(N int) []int {
