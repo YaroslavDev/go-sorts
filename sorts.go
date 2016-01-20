@@ -1,5 +1,6 @@
 package sorts
 
+// Partition implementation of Lomuto partition https://en.wikipedia.org/wiki/Quicksort
 func Partition(input []int, lo, hi int) int {
 	pivot := input[hi]
 	i := lo
@@ -13,6 +14,7 @@ func Partition(input []int, lo, hi int) int {
 	return i
 }
 
+// QuickSort implementation of quick sort
 func QuickSort(input []int, lo, hi int) {
 	if lo < hi {
 		p := Partition(input, lo, hi)
@@ -21,11 +23,13 @@ func QuickSort(input []int, lo, hi int) {
 	}
 }
 
-const PARALLEL_THRESHOLD = 10000
+// ParallelThreshold on which sequential implementation should be chosen instead of parallel one
+const ParallelThreshold = 10000
 
+// ParallelQuickSort concurrent quick sort implementation that uses goroutines
 func ParallelQuickSort(input []int, lo, hi int, done chan bool) {
 	if lo < hi {
-		if hi - lo > PARALLEL_THRESHOLD {
+		if hi-lo > ParallelThreshold {
 			p := Partition(input, lo, hi)
 			jobsFinished := make(chan bool)
 			go ParallelQuickSort(input, lo, p-1, jobsFinished)
